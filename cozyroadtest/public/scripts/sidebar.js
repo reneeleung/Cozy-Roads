@@ -8,12 +8,13 @@ $(function () {
 
     // Check User Authentication
     firebase.auth().onAuthStateChanged(function(user) {
-        if(user) {
+      debugger;
+        if(user && user.email != null) {
             // Setup the logged in screen information
             $(".logged-in").removeClass("hidden");
             $("#Statistics").html(htmlSidebarLoggedIn(user));
             $("#firebaseui-auth-container").addClass("hidden");
-          
+
         }
         else {
           console.log("no user signed in")
@@ -37,15 +38,15 @@ $("#show-sidebar").on("click", function () {
     $("#map-container").removeClass("col-md-12");
     $("#map-container").addClass("col-md-8");
 
-    // Show Sidebar 
+    // Show Sidebar
     $("#sidebar-container").removeClass("hidden");
 
-    // Hide show sidebar button 
+    // Hide show sidebar button
     $("#show-sidebar").addClass("hidden");
 });
 
 $("#hide-sidebar").on("click", function () {
-    // Hide sidebar 
+    // Hide sidebar
     $("#sidebar-container").addClass("hidden");
 
     // Resize map
