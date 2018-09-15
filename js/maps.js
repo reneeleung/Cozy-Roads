@@ -285,7 +285,7 @@ function removeMarkers(){
     var childKey = childSnapshot.key;
     var childData = childSnapshot.val();
     if (childData.sender == myuid) {
-      console.log("match sender");
+      //console.log("match sender");
       ref.child(childKey).remove();
     }
   });
