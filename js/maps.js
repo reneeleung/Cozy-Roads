@@ -181,16 +181,41 @@ AutocompleteDirectionsHandler.prototype.route = function() {
       //me.directionsDisplay.setDirections(response);
       //console.log(response.routes.length);
       //show all alternative routes
-      for (var i = 0, len = response.routes.length; i < len; ++i) {
-        new google.maps.DirectionsRenderer({
-            map: me.map,
-            directions: response,
-            routeIndex: i
-        });
+      var isLocationOnEdge = google.maps.geometry.poly.isLocationOnEdge;
+      //loop through all dangerous points
+      var ref = firebase.database().ref('clicks');
+
+       for (var i = 0, len = response.routes.length; i < len; ++i) {
+         var dangerous_path = false;
+         ref.once('value', function(snapshot) {
+           snapshot.forEach(function(childSnapshot) {
+             var childData = childSnapshot.val();
+             var point = new google.maps.LatLng(childData.lat, childData.lng);
+             //var path = response.routes[i].legs;
+             var path = response.routes[i].overview_path;
+             var polyline = new google.maps.Polyline({
+               path: path
+             })
+             if (isLocationOnEdge(point,polyline,1e-4)) {
+               dangerous_path = true;
+             }
+           });
+         });
+         if (!dangerous_path) {
+           new google.maps.DirectionsRenderer({
+             map: me.map,
+             directions: response,
+             routeIndex: i
+           });
+           console.log("printed non-dangerous route");
+         } else {
+           console.log("dangerous route!");
+         }
+       }
+
+      } else {
+        window.alert('Directions request failed due to ' + status);
       }
-    } else {
-      window.alert('Directions request failed due to ' + status);
-    }
   });
 };
 
