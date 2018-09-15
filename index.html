@@ -1,22 +1,52 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
+    <!-- Bootstrap 4 -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <!-- Page Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+
   </head>
   <body>
-    <div id="map"></div>
+    <div class="row fullheight">
+
+      <div id="map-container" class="col-md-8">
+        <div id="map">
+        </div>
+        <div type="button" class="btn hidden" id="show-sidebar"> Show side bar </div>
+      </div>
+
+      <div id="sidebar-container" class="col-md-4">
+        <div id="sidebar">
+          <div type="button" class="btn" id="hide-sidebar"> Hide side bar </div>
+          <div class="no-login">
+            <div type="button" class="btn" id="signup"> Sign Up </div>
+            <div type="button" class="btn" id="login"> Login </div>
+          </div>
+          <div class="logged-in hidden"> <!-- I think if you added/removed the 'hidden' class, you can dynamically hide/unhide elements? -->
+            <div type="button" class="btn" id="logout"> Log out </div>
+
+            <div id="Statistics">
+              <!-- SHOW USER STATISTICS HERE?? --> 
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <script src="js/sidebar.js" />
 
     <script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>
     <script type="text/javascript" src="js/firebase.js"></script>
