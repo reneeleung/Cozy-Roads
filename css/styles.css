@@ -1,0 +1,35 @@
+.hidden {
+    display: none;
+}
+
+.btn {
+    margin: 5px;
+}
+
+#map-container {
+    position: relative;
+}
+
+#show-sidebar {
+    position: absolute; 
+    top: 10px; 
+    left: 90%;
+    z-index: 0;
+}
+  
+/* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+.fullheight {
+    height: 100%;
+}
+
+#map {
+    height: 100%;
+}
+
+  /* Optional: Makes the sample page fill the window. */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
