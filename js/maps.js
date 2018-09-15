@@ -51,6 +51,7 @@ function makeInfoBox(controlDiv, map) {
 function initAuthentication(onAuthSuccess) {
   firebase.auth().signInAnonymously().then(function(authData) {
     data.sender = authData.user.uid;
+    myuid = data.sender;
     onAuthSuccess();
   }, function(error) {
     console.log('Login Failed!', error);
@@ -279,5 +280,14 @@ function addToFirebase(data) {
 function removeMarkers(){
 
  var ref = firebase.database().ref('clicks');
- ref.remove();
+ ref.once('value', function(snapshot) {
+  snapshot.forEach(function(childSnapshot) {
+    var childKey = childSnapshot.key;
+    var childData = childSnapshot.val();
+    if (childData.sender == myuid) {
+      //console.log("match sender");
+      ref.child(childKey).remove();
+    }
+  });
+});
 }
