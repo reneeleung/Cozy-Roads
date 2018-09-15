@@ -11,22 +11,25 @@
     <script defer src="/__/firebase/5.5.0/firebase-storage.js"></script>
     <script defer src="/__/firebase/init.js"></script>
     <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
+    <script src="scripts/map.js"></script>
+    <script src="scripts/sidebar.js"></script>
+  </script>
 
 
-    <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyDUU3U3GroSvTLWiY_37Izd81QMBSr3yJA",
-        authDomain: "cozy-road-test.firebaseapp.com",
-        databaseURL: "https://cozy-road-test.firebaseio.com",
-        projectId: "cozy-road-test",
-        storageBucket: "cozy-road-test.appspot.com",
-        messagingSenderId: "306187772812",
-        clientId: "306187772812-rabplmrug8l7t4ldqalkq8880bc5folv.apps.googleusercontent.com"
-      };
-      firebase.initializeApp(config);
-    </script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyAWKDJGNA9gs0KJGWUZgCt8OL8obONs2-4",
+      authDomain: "htn18-216503.firebaseapp.com",
+      databaseURL: "https://htn18-216503.firebaseio.com",
+      projectId: "htn18-216503",
+      storageBucket: "htn18-216503.appspot.com",
+      messagingSenderId: "386189294387"
+    };
+    firebase.initializeApp(config);
+  </script>
+
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.css" />
     <script type="text/javascript">
   // FirebaseUI config.
@@ -52,20 +55,15 @@
   // The start method will wait until the DOM is loaded.
   ui.start('#firebaseui-auth-container', uiConfig);
 </script>
-
     <!-- Bootstrap 4 -->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
     <!-- Popper JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-
     <!-- Page Styles -->
     <link rel="stylesheet" href="css/styles.css">
 
@@ -73,8 +71,6 @@
   <div></div>
   <body>
     <!-- <h1 align="center" style="color: white;">Demo</h1> -->
-
-
     <div class="row fullheight">
 
       <div id="map-container" class="col-md-8">
@@ -106,9 +102,6 @@
         <div id="sidebar">
           <div type="button" class="btn" id="hide-sidebar"> Hide side bar </div>
           <div class="no-login">
-            <div type="button" class="btn" id="signup"> Sign Up </div>
-            <div type="button" class="btn" id="login"> Login </div>
-
             <div id="firebaseui-auth-container">
             </div>
 
