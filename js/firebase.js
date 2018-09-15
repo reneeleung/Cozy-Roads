@@ -32,7 +32,7 @@ function makeInfoBox(controlDiv, map) {
   controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
   controlText.style.fontSize = '100%';
   controlText.style.padding = '6px';
-  controlText.textContent = 'The map shows all clicks made in the last 10 minutes.';
+  //controlText.textContent = 'The map shows all clicks made in the last 10 minutes.';
   controlUI.appendChild(controlText);
 }
 
@@ -101,30 +101,31 @@ function initMap() {
 function initFirebase(heatmap) {
 
   // 10 minutes before current time.
-  var startTime = new Date().getTime() - (60 * 10 * 1000);
+  //var startTime = new Date().getTime() - (60 * 10 * 1000);
 
   // Reference to the clicks in Firebase.
   var clicks = firebase.child('clicks');
 
   // Listener for when a click is added.
-  clicks.orderByChild('timestamp').startAt(startTime).on('child_added',
+  //clicks.orderByChild('timestamp').startAt(startTime).on('child_added',
+  clicks.on('child_added',
     function(snapshot) {
 
       // Get that click from firebase.
       var newPosition = snapshot.val();
       var point = new google.maps.LatLng(newPosition.lat, newPosition.lng);
-      var elapsed = new Date().getTime() - newPosition.timestamp;
+      //var elapsed = new Date().getTime() - newPosition.timestamp;
 
       // Add the point to  the heatmap.
       heatmap.getData().push(point);
 
       // Requests entries older than expiry time (10 minutes).
-      var expirySeconds = Math.max(60 * 10 * 1000 - elapsed, 0);
+      /*var expirySeconds = Math.max(60 * 10 * 1000 - elapsed, 0);
       // Set client timeout to remove the point after a certain time.
       window.setTimeout(function() {
         // Delete the old point from the database.
         snapshot.ref().remove();
-      }, expirySeconds);
+      }, expirySeconds);*/
     }
   );
 
