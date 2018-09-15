@@ -174,10 +174,20 @@ AutocompleteDirectionsHandler.prototype.route = function() {
   this.directionsService.route({
     origin: {'placeId': this.originPlaceId},
     destination: {'placeId': this.destinationPlaceId},
+    provideRouteAlternatives: true,
     travelMode: this.travelMode
   }, function(response, status) {
     if (status === 'OK') {
-      me.directionsDisplay.setDirections(response);
+      //me.directionsDisplay.setDirections(response);
+      //console.log(response.routes.length);
+      //show all alternative routes
+      for (var i = 0, len = response.routes.length; i < len; ++i) {
+        new google.maps.DirectionsRenderer({
+            map: me.map,
+            directions: response,
+            routeIndex: i
+        });
+      }
     } else {
       window.alert('Directions request failed due to ' + status);
     }
