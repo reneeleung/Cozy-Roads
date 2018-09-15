@@ -189,3 +189,10 @@ function addToFirebase(data) {
     });
   });
 }
+
+
+function removeMarkers(){
+
+ var ref = firebase.database().ref('clicks');
+ ref.remove();
+}
