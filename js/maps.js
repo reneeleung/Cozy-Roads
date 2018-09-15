@@ -2,7 +2,15 @@
 * Reference to Firebase database.
 * @const
 */
-var firebase = new Firebase('https://fire-map-tutorial.firebaseio.com/');
+var config = {
+    apiKey: "AIzaSyAWKDJGNA9gs0KJGWUZgCt8OL8obONs2-4",
+    authDomain: "htn18-216503.firebaseapp.com",
+    databaseURL: "https://htn18-216503.firebaseio.com",
+    projectId: "htn18-216503",
+    storageBucket: "htn18-216503.appspot.com",
+    messagingSenderId: "386189294387"
+};
+firebase.initializeApp(config);
 
 /**
 * Data object to be written to Firebase.
@@ -41,14 +49,12 @@ function makeInfoBox(controlDiv, map) {
 * @param {function()} onAuthSuccess - Called when authentication succeeds.
 */
 function initAuthentication(onAuthSuccess) {
-  firebase.authAnonymously(function(error, authData) {
-    if (error) {
-      console.log('Login Failed!', error);
-    } else {
-      data.sender = authData.uid;
-      onAuthSuccess();
-    }
-  }, {remember: 'sessionOnly'});  // Users will get a new id for every session.
+  firebase.auth().signInAnonymously().then(function(authData) {
+    data.sender = authData.user.uid;
+    onAuthSuccess();
+  }, function(error) {
+    console.log('Login Failed!', error);
+  });  // Users will get a new id for every session.
 }
 
 /**
@@ -104,7 +110,7 @@ function initFirebase(heatmap) {
   //var startTime = new Date().getTime() - (60 * 10 * 1000);
 
   // Reference to the clicks in Firebase.
-  var clicks = firebase.child('clicks');
+  var clicks = firebase.database().ref('clicks');
 
   // Listener for when a click is added.
   //clicks.orderByChild('timestamp').startAt(startTime).on('child_added',
@@ -149,12 +155,12 @@ function initFirebase(heatmap) {
  */
 function getTimestamp(addClick) {
   // Reference to location for saving the last click time.
-  var ref = firebase.child('last_message/' + data.sender);
+  var ref = firebase.database().ref('last_message/' + data.sender);
 
   ref.onDisconnect().remove();  // Delete reference from firebase on disconnect.
 
   // Set value to timestamp.
-  ref.set(Firebase.ServerValue.TIMESTAMP, function(err) {
+  ref.set(firebase.database.ServerValue.TIMESTAMP, function(err) {
     if (err) {  // Write to last message was unsuccessful.
       console.log(err);
     } else {  // Write to last message was successful.
@@ -176,7 +182,7 @@ function addToFirebase(data) {
   getTimestamp(function(timestamp) {
     // Add the new timestamp to the record data.
     data.timestamp = timestamp;
-    var ref = firebase.child('clicks').push(data, function(err) {
+    var ref = firebase.database().ref('clicks').push(data, function(err) {
       if (err) {  // Data was not written to firebase.
         console.warn(err);
       }
