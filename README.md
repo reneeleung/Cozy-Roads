@@ -1,4 +1,4 @@
-## Cozy-Roads - Hack the North 2018 
+## Cozy-Roads - Hack The North 2018 
 
 Our application can be found at: https://htn18-216503.firebaseapp.com
 
