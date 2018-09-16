@@ -2,15 +2,39 @@
 * Reference to Firebase database.
 * @const
 */
-var config = {
-    apiKey: "AIzaSyAWKDJGNA9gs0KJGWUZgCt8OL8obONs2-4",
-    authDomain: "htn18-216503.firebaseapp.com",
-    databaseURL: "https://htn18-216503.firebaseio.com",
-    projectId: "htn18-216503",
-    storageBucket: "htn18-216503.appspot.com",
-    messagingSenderId: "386189294387"
+initApp = function() {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // User is signed in.
+      var displayName = user.displayName;
+      var email = user.email;
+      var emailVerified = user.emailVerified;
+      var photoURL = user.photoURL;
+      var uid = user.uid;
+      var phoneNumber = user.phoneNumber;
+      var providerData = user.providerData;
+      // user.getIdToken().then(function(accessToken) {
+      //   document.getElementById('account-details').textContent = JSON.stringify({
+      //     displayName: displayName,
+      //     email: email,
+      //     emailVerified: emailVerified,
+      //     phoneNumber: phoneNumber,
+      //     photoURL: photoURL,
+      //     uid: uid,
+      //     accessToken: accessToken,
+      //     providerData: providerData
+      //   }, null, '  ');
+      // });
+    }
+  }, function(error) {
+    console.log(error);
+  });
 };
-firebase.initializeApp(config);
+
+window.addEventListener('load', function() {
+  initApp()
+});
+
 
 /**
 * Data object to be written to Firebase.
@@ -49,18 +73,37 @@ function makeInfoBox(controlDiv, map) {
 * @param {function()} onAuthSuccess - Called when authentication succeeds.
 */
 function initAuthentication(onAuthSuccess) {
-  firebase.auth().signInAnonymously().then(function(authData) {
-    data.sender = authData.user.uid;
-    myuid = data.sender;
+  // Temporarily disabled; we want to make sure we're not overwriting
+  // a signed in user with an anonymous user
+  firebase.auth().onAuthStateChanged(user => {
+    if (user == null) {
+    firebase.auth().signInAnonymously().then(function(authData) {
+      data.sender = authData.user.uid;
+      myuid = data.sender;
+      onAuthSuccess();
+    }, function(error) {
+      console.log('Login Failed!', error);
+    })   // Users will get a new id for every session.
+  } else {
     onAuthSuccess();
-  }, function(error) {
-    console.log('Login Failed!', error);
-  });  // Users will get a new id for every session.
+  }
+  });
 }
+
+
+
+
 
 /**
  * Creates a map object with a click listener and a heatmap.
  */
+ // Returns true if a user is signed-in.
+ function isUserSignedIn() {
+   var user = firebase.auth().currentUser;
+   console.log(user || "not logged in");
+   return !!user && !user.isAnonymous;
+ }
+
 function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 0, lng: 0},
@@ -84,20 +127,22 @@ function initMap() {
   var infoBoxDiv = document.createElement('div');
   makeInfoBox(infoBoxDiv, map);
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(infoBoxDiv);
+   // Listen for clicks and add the location of the click to firebase.
+   map.addListener('click', function(e) {
+       if(isUserSignedIn()) {
+         // alert("User is signed in")
+         data.lat = e.latLng.lat();
+         data.lng = e.latLng.lng();
+         addToFirebase(data);
+       }
+   });
 
-  // Listen for clicks and add the location of the click to firebase.
-  map.addListener('click', function(e) {
-    data.lat = e.latLng.lat();
-    data.lng = e.latLng.lng();
-    addToFirebase(data);
-  });
-
-  // Create a heatmap.
-  var heatmap = new google.maps.visualization.HeatmapLayer({
-    data: [],
-    map: map,
-    radius: 16
-  });
+ // Create a heatmap.
+ var heatmap = new google.maps.visualization.HeatmapLayer({
+   data: [],
+   map: map,
+   radius: 16
+ });
 
   initAuthentication(initFirebase.bind(undefined, heatmap));
 }
