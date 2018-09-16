@@ -330,7 +330,6 @@ function initFirebase(heatmap) {
       var newPosition = snapshot.val();
       var point = new google.maps.LatLng(newPosition.lat, newPosition.lng);
       //var elapsed = new Date().getTime() - newPosition.timestamp;
-
       // Add the point to  the heatmap.
       heatmap.getData().push(point);
 

@@ -45,14 +45,18 @@ html, body {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
+body {
+  padding-top: 5rem;
+}
+
 #origin-input,
 #destination-input {
     background-color: #fff;
     font-family: Roboto;
     font-size: 15px;
     font-weight: 300;
-    margin-left: 12px;
-    padding: 0 11px 0 13px;
+    margin-left: 5px;
+    padding: 0 10px 0 10px;
     text-overflow: ellipsis;
     width: 200px;
 }
@@ -78,7 +82,7 @@ html, body {
 #safety-selector {
     color: #fff;
     background-color: #4d90fe;
-    margin-left: 12px;
+    margin-left: 10px;
     padding: 5px 11px 0px 11px;
 }
 

@@ -41,6 +41,9 @@ function htmlSidebarLoggedIn(user) {
 function signOut() {
   // Sign out of Firebase.
   firebase.auth().signOut();
+  $("#statistics").addClass("hidden");
+  $("#firebaseui-auth-container").removeClass("hidden");
+  $("#logout").addClass("hidden");
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -52,31 +55,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if(user && user.email != null) {
             // Setup the logged in screen information
             $(".logged-in").removeClass("hidden");
-            $("#Statistics").html(htmlSidebarLoggedIn(user));
+            $("#statistics").html(htmlSidebarLoggedIn(user));
             $("#firebaseui-auth-container").addClass("hidden");
-
+            $("#logout").removeClass("hidden");
         }
         else {
           console.log("no user signed in");
         }
     });
-
-    /*
-    $("#map").on("click", function(e) {
-        if (user) {
-            // Yeah sure whatever
-        }
-        else {
-            e.preventDefault()
-        }
-    })
-    */
 });
 
 $("#show-sidebar").on("click", function () {
     // Resize map
     $("#map-container").removeClass("col-md-12");
-    $("#map-container").addClass("col-md-8");
+    $("#map-container").addClass("col-md-9");
 
     // Show Sidebar
     $("#sidebar-container").removeClass("hidden");
@@ -87,12 +79,19 @@ $("#show-sidebar").on("click", function () {
 
 $("#hide-sidebar").on("click", function () {
     // Hide sidebar
-    $("#sidebar-container").addClass("hidden");
+    console.log($("#sidebar-container").hasClass("hidden"));
+    if($("#sidebar-container").hasClass("hidden")) {
+      // Resize map
+      $("#map-container").removeClass("col-md-12");
+      $("#map-container").addClass("col-md-9");
 
-    // Resize map
-    $("#map-container").removeClass("col-md-8");
-    $("#map-container").addClass("col-md-12");
-
-    // Unhide button Show-Sidebar
-    $("#show-sidebar").removeClass("hidden");
+      // Show Sidebar
+      $("#sidebar-container").removeClass("hidden");
+    }
+    else {
+      $("#sidebar-container").addClass("hidden");
+      // Resize map
+      $("#map-container").removeClass("col-md-8");
+      $("#map-container").addClass("col-md-12");
+    }
 });

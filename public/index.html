@@ -69,59 +69,81 @@
     <link rel="stylesheet" href="css/styles.css">
 
   </head>
-  <div></div>
   <body>
     <!-- <h1 align="center" style="color: white;">Demo</h1> -->
+    <nav class="navbar navbar-dark navbar-inverse bg-inverse bg-dark fixed-top">
+      <a class="navbar-brand" href="#">Cozy Road</a>
+      <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ourMenu" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button> -->
+      <!-- <div class="collapse navbar-collapse" id="ourMenu"> -->
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li> -->
+
+        </ul>
+        <!-- <form class="form-inline my-2 my-lg-0"> -->
+          <button class="btn btn-outline-success my-2 my-sm-0" id="hide-sidebar" type="submit">=</button>
+          <div type="button" class="btn hidden" id="show-sidebar"> = </div>
+        <!-- </form> -->
+      <!-- </div> -->
+    </nav>
+
     <div class="row fullheight">
+        <div id="map-container" class="col-md-9">
+          <input id="origin-input" class="controls" type="text"
+          placeholder="Enter origin">
 
-      <div id="map-container" class="col-md-8">
-        <input id="origin-input" class="controls" type="text"
-        placeholder="Enter an origin location">
+      <input id="destination-input" class="controls" type="text"
+          placeholder="Enter destination">
 
-    <input id="destination-input" class="controls" type="text"
-        placeholder="Enter a destination location">
+      <div id="mode-selector" class="controls">
+        <input type="radio" name="type" id="changemode-walking" checked="checked">
+        <label for="changemode-walking">Walking</label>
 
-    <div id="mode-selector" class="controls">
-      <input type="radio" name="type" id="changemode-walking" checked="checked">
-      <label for="changemode-walking">Walking</label>
+        <input type="radio" name="type" id="changemode-transit">
+        <label for="changemode-transit">Transit</label>
 
-      <input type="radio" name="type" id="changemode-transit">
-      <label for="changemode-transit">Transit</label>
+        <input type="radio" name="type" id="changemode-driving">
+        <label for="changemode-driving">Driving</label>
+      </div>
+      <div id="safety-selector" class="controls">
+          <input type="radio" name="type2" id="changesafety-safe" checked="checked">
+          <label for="changesafety-safe">Safe</label>
 
-      <input type="radio" name="type" id="changemode-driving">
-      <label for="changemode-driving">Driving</label>
-    </div>
-    <div id="safety-selector" class="controls">
-        <input type="radio" name="type2" id="changesafety-safe" checked="checked">
-        <label for="changesafety-safe">Safe</label>
-
-        <input type="radio" name="type2" id="changesafety-verysafe">
-        <label for="changesafety-verysafe">Very Safe</label>
-    </div>
-        <div id="map">
+          <input type="radio" name="type2" id="changesafety-verysafe">
+          <label for="changesafety-verysafe">Very Safe</label>
+      </div>
+          <div id="map"></div>
         </div>
-        <div type="button" class="btn hidden" id="show-sidebar"> Show side bar </div>
+
+        <div id="sidebar-container" class="col-md-3">
+          <div class="container-fluid">
+
+            <div id="sidebar">
+              <!-- <div type="button" class="btn" id="hide-sidebar"> Hide side bar </div> -->
+              <div class="no-login">
+                <div id="firebaseui-auth-container">
+                </div>
+              </div>
+
+              <div class="logged-in hidden">
+                <!-- I think if you added/removed the 'hidden' class, you can dynamically hide/unhide elements? -->
+                <div id="statistics">
+                  <!-- SHOW USER STATISTICS HERE?? -->
+                </div>
+                <div type="button" class="btn" id="logout" onclick="signOut()"> Log out </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      <div id="sidebar-container" class="col-md-4">
-        <div id="sidebar">
-          <div type="button" class="btn" id="hide-sidebar"> Hide side bar </div>
-          <div class="no-login">
-            <div id="firebaseui-auth-container">
-            </div>
-
-          </div>
-          <div class="logged-in hidden"> <!-- I think if you added/removed the 'hidden' class, you can dynamically hide/unhide elements? -->
-            <div type="button" class="btn" id="logout" onclick="signOut()"> Log out </div>
-            <div id="Statistics">
-              <!-- SHOW USER STATISTICS HERE?? -->
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-    </div>
     <script src="scripts/sidebar.js"></script>
     <script src="scripts/maps.js"></script>
 
