@@ -98,3 +98,15 @@ h3 {
     font-size: 13px;
     font-weight: 300;
 }
+
+#instructions {
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    background-color: white;
+    bottom: 0;
+    overflow-y: scroll;
+    font-size: 10px;
+    text-align: center;
+}
+
