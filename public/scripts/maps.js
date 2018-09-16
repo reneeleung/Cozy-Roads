@@ -149,15 +149,50 @@ function initMap() {
     removeMarkers();
   });
 
+
+
   // Listen for clicks and add the location of the click to firebase.
+
+  var iwindow= new google.maps.InfoWindow;
   map.addListener('click', function(e) {
-     if(isUserSignedIn()) {
-       // alert("User is signed in")
-       data.lat = e.latLng.lat();
-       data.lng = e.latLng.lng();
-       addToFirebase(data);
-     }
+    // is there something nearby
+    //    if so show it
+    /// else
+
+
+    // alert("User is signed in")
+    data.lat = e.latLng.lat();
+    data.lng = e.latLng.lng();
+    console.log("BOO" + data.lat);
+    //   createSurvey(data.lat, data.lng);
+
+
+
+    iwindow.setOptions({position: e.latLng});
+
+    iwindow.open(map,this);
+    iwindow.open(map,this);
+    console.log(data.lat);
+
+
+    var nearbyMarker = getNearbyMarker(e.latLng);
+    if (nearbyMarker) {
+
+      // show it
+      iwindow.setContent("You are near a previously reported danger zone.");
+
+
+    } else if(isUserSignedIn()) {
+
+      var dangerMessage = makeMessage();
+      iwindow.setContent(dangerMessage);
+
+      addToFirebase(data);
+    }
+
+    setTimeout(function () { iwindow.close(); }, 9000);
   });
+
 
  // Create a heatmap.
  var heatmap = new google.maps.visualization.HeatmapLayer({
@@ -313,6 +348,17 @@ AutocompleteDirectionsHandler.prototype.route = function() {
  * @param {!google.maps.visualization.HeatmapLayer} heatmap The heatmap to
  * which points are added from Firebase.
  */
+ function makeMessage(){
+ var txt;
+   var person = prompt("Please report the danger", "e.g. robbery");
+   if (person == null || person == "") {
+       txt = "User cancelled the prompt.";
+   } else {
+       txt = person;
+   }
+   return txt;
+}
+
 function initFirebase(heatmap) {
 
   // 10 minutes before current time.
@@ -330,6 +376,7 @@ function initFirebase(heatmap) {
       var newPosition = snapshot.val();
       var point = new google.maps.LatLng(newPosition.lat, newPosition.lng);
       //var elapsed = new Date().getTime() - newPosition.timestamp;
+
       // Add the point to  the heatmap.
       heatmap.getData().push(point);
 
@@ -399,6 +446,22 @@ function addToFirebase(data) {
 }
 
 
+     function getNearbyMarker(latlng) {
+     var ref = firebase.database().ref('clicks');
+     ref.once('value', function(snapshot) {
+     snapshot.forEach(function(childSnapshot) {
+       var childKey = childSnapshot.key;
+       var childData = childSnapshot.val();
+       if (childData.lat == latlng.lat && childData.lng == latlng.lng) {
+         //console.log("match sender");
+         return true;
+       }
+     });
+  });
+
+       return false
+
+  }
 function removeMarkers(){
 
  var ref = firebase.database().ref('clicks');
