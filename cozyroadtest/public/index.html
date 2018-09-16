@@ -10,6 +10,7 @@
     <script defer src="/__/firebase/5.5.0/firebase-messaging.js"></script>
     <script defer src="/__/firebase/5.5.0/firebase-storage.js"></script>
     <script defer src="/__/firebase/init.js"></script>
+    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
     <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
     <script src="scripts/maps.js"></script>
     <script src="scripts/sidebar.js"></script>
@@ -107,7 +108,7 @@
 
           </div>
           <div class="logged-in hidden"> <!-- I think if you added/removed the 'hidden' class, you can dynamically hide/unhide elements? -->
-            <div type="button" class="btn" id="logout"> Log out </div>
+            <div type="button" class="btn" id="logout" onclick="signOut()"> Log out </div>
             <div id="Statistics">
               <!-- SHOW USER STATISTICS HERE?? -->
             </div>
