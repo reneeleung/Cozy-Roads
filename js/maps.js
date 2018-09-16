@@ -138,8 +138,9 @@ function AutocompleteDirectionsHandler(map) {
   var modeSelector = document.getElementById('mode-selector');
   var safetySelector = document.getElementById('safety-selector');
   this.directionsService = new google.maps.DirectionsService;
-  this.directionsDisplay = new google.maps.DirectionsRenderer;
-  this.directionsDisplay.setMap(map);
+  this.directionsDisplays = [];
+  //this.directionsDisplay = new google.maps.DirectionsRenderer;
+  //this.directionsDisplay.setMap(map);
 
   var originAutocomplete = new google.maps.places.Autocomplete(
       originInput, {placeIdOnly: true});
@@ -214,6 +215,10 @@ AutocompleteDirectionsHandler.prototype.route = function() {
     travelMode: this.travelMode
   }, function(response, status) {
     if (status === 'OK') {
+      me.directionsDisplays.forEach(direction => {
+        direction.setMap(null);
+      });
+      me.directionsDisplays = [];
       //me.directionsDisplay.setDirections(response);
       //console.log(response.routes.length);
       //show all alternative routes
@@ -232,20 +237,22 @@ AutocompleteDirectionsHandler.prototype.route = function() {
              var polyline = new google.maps.Polyline({
                path: path
              })
-             if (me.safety == "SAFE" && isLocationOnEdge(point,polyline,1e-4)) {
+             if (me.safetyMode == "SAFE" && isLocationOnEdge(point,polyline,13e-5)) {
                dangerous_path = true;
-             } else if (me.safety == "VERY SAFE" && isLocationOnEdge(point,polyline,1e-3)) {
+             } else if (me.safetyMode == "VERY SAFE" && isLocationOnEdge(point,polyline,1e-3)) {
                dangerous_path = true;
              }
            });
          });
          if (!dangerous_path) {
-           new google.maps.DirectionsRenderer({
+           var newDirectionsRenderer = new google.maps.DirectionsRenderer({
              map: me.map,
              directions: response,
              routeIndex: i
            });
            console.log("printed non-dangerous route");
+           me.directionsDisplays.push(newDirectionsRenderer);
+           //onsole.log("added new renderer to displays array");
          } else {
            console.log("dangerous route!");
          }
