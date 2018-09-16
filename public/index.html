@@ -91,9 +91,13 @@
       <input type="radio" name="type" id="changemode-driving">
       <label for="changemode-driving">Driving</label>
     </div>
-        <div id = "remove_markers">
-          <input type="button" value="Remove My Markers" onClick = "removeMarkers()" />
-        </div>
+    <div id="safety-selector" class="controls">
+        <input type="radio" name="type2" id="changesafety-safe" checked="checked">
+        <label for="changesafety-safe">Safe</label>
+
+        <input type="radio" name="type2" id="changesafety-verysafe">
+        <label for="changesafety-verysafe">Very Safe</label>
+    </div>
         <div id="map">
         </div>
         <div type="button" class="btn hidden" id="show-sidebar"> Show side bar </div>
@@ -127,7 +131,7 @@
     <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-auth.js"></script>
     <script type="text/javascript" src="scripts/maps.js"></script>
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcs6qkS59r4ALs4edBXU-qWEBZlAy13F0&libraries=visualization,places&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcs6qkS59r4ALs4edBXU-qWEBZlAy13F0&libraries=visualization,places,geometry&callback=initMap">
     </script>
 
     <script src="/__/firebase/5.5.0/firebase-app.js"></script>
