@@ -296,6 +296,7 @@ AutocompleteDirectionsHandler.prototype.route = function() {
            });
            console.log("printed non-dangerous route");
            me.directionsDisplays.push(newDirectionsRenderer);
+           showSteps(response,i);
            //onsole.log("added new renderer to displays array");
          } else {
            console.log("dangerous route!");
@@ -307,6 +308,24 @@ AutocompleteDirectionsHandler.prototype.route = function() {
   });
 };
 
+function showSteps(directionResult, route) {
+    var myRoute = directionResult.routes[route].legs[0];
+    console.log(myRoute.steps.length);
+    var instructionsEl = document.getElementById('instructions');
+    instructionsEl.innerHTML = "";
+    var heading = document.createElement('div');
+    heading.style.fontSize = "12px";
+    heading.innerHTML = myRoute.duration.text;
+    heading.innerHTML +=myRoute.distance.text;
+    instructionsEl.appendChild(heading);
+    for (var i = 0; i < myRoute.steps.length; i++) {
+        var instruction = document.createElement('div');
+        instruction.innerHTML = myRoute.steps[i].instructions;
+        instructionsEl.appendChild(instruction);
+        console.log(myRoute.steps[i].instructions);
+    }
+    console.log(myRoute.distance.text);
+}
 
 /**
  * Set up a Firebase with deletion on clicks older than expirySeconds
