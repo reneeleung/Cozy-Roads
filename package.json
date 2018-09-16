@@ -12,5 +12,8 @@
     "firebase": "^5.5.0",
     "firebase-functions": "^2.0.5",
     "firebaseui": "^3.4.1"
+  },
+  "devDependencies": {
+    "firebase-tools": "^4.2.1"
   }
 }

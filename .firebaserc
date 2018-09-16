@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "htn18-216503"
+    "default": "htn18-216503",
+    "staging": "htn18-216503"
   }
 }
