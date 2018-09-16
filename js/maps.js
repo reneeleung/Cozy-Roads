@@ -86,18 +86,22 @@ function initMap() {
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(infoBoxDiv);
 
   // Listen for clicks and add the location of the click to firebase.
-  map.addListener('click', function(e) {
-    data.lat = e.latLng.lat();
-    data.lng = e.latLng.lng();
-    addToFirebase(data);
-  });
+  if(user && user.email != null) {
+      // Setup the logged in screen information
+      map.addListener('click', function(e) {
+        data.lat = e.latLng.lat();
+        data.lng = e.latLng.lng();
+        addToFirebase(data);
+      });
 
-  // Create a heatmap.
-  var heatmap = new google.maps.visualization.HeatmapLayer({
-    data: [],
-    map: map,
-    radius: 16
-  });
+      // Create a heatmap.
+      var heatmap = new google.maps.visualization.HeatmapLayer({
+        data: [],
+        map: map,
+        radius: 16
+      });
+  }
+
 
   initAuthentication(initFirebase.bind(undefined, heatmap));
 }
