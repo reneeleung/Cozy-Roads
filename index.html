@@ -1,85 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
   <head>
-    <!-- Bootstrap 4 -->
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <title>Cozy Road</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- <script defer src="/__/firebase/5.5.0/firebase-app.js"></script>
+    <script defer src="/__/firebase/5.5.0/firebase-auth.js"></script>
+    <script defer src="/__/firebase/5.5.0/firebase-database.js"></script>
+    <script defer src="/__/firebase/5.5.0/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/5.5.0/firebase-storage.js"></script>
+    <script defer src="/__/firebase/init.js"></script> -->
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
 
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-
-    <!-- Page Styles -->
-    <link rel="stylesheet" href="css/styles.css">
-
-  </head>
-  <body>
-    <div class="row fullheight">
-
-      <div id="map-container" class="col-md-8">
-        <input id="origin-input" class="controls" type="text"
-        placeholder="Enter an origin location">
-
-    <input id="destination-input" class="controls" type="text"
-        placeholder="Enter a destination location">
-
-    <div id="mode-selector" class="controls">
-      <input type="radio" name="type" id="changemode-walking" checked="checked">
-      <label for="changemode-walking">Walking</label>
-
-      <input type="radio" name="type" id="changemode-transit">
-      <label for="changemode-transit">Transit</label>
-
-      <input type="radio" name="type" id="changemode-driving">
-      <label for="changemode-driving">Driving</label>
-    </div>
-
-    <div id="safety-selector" class="controls">
-        <input type="radio" name="type2" id="changesafety-safe" checked="checked">
-        <label for="changesafety-safe">Safe</label>
-
-        <input type="radio" name="type2" id="changesafety-verysafe">
-        <label for="changesafety-verysafe">Very Safe</label>
-    </div>
-
-        <div id="map">
-        </div>
-        <div type="button" class="btn hidden" id="show-sidebar"> Show side bar </div>
-      </div>
-
-      <div id="sidebar-container" class="col-md-4">
-        <div id="sidebar">
-          <div type="button" class="btn" id="hide-sidebar"> Hide side bar </div>
-          <div class="no-login">
-            <div type="button" class="btn" id="signup"> Sign Up </div>
-            <div type="button" class="btn" id="login"> Login </div>
-          </div>
-          <div class="logged-in hidden"> <!-- I think if you added/removed the 'hidden' class, you can dynamically hide/unhide elements? -->
-            <div type="button" class="btn" id="logout"> Log out </div>
-
-            <div id="Statistics">
-              <!-- SHOW USER STATISTICS HERE?? -->
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <script src="js/sidebar.js"></script>
-
-    <!--<script src="https://cdn.firebase.com/js/client/2.3.2/firebase.js"></script>-->
-    <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-auth.js"></script>
-    <script type="text/javascript" src="js/maps.js"></script>
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcs6qkS59r4ALs4edBXU-qWEBZlAy13F0&libraries=visualization,places,geometry&callback=initMap">
+    <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDUU3U3GroSvTLWiY_37Izd81QMBSr3yJA",
+        authDomain: "cozy-road-test.firebaseapp.com",
+        databaseURL: "https://cozy-road-test.firebaseio.com",
+        projectId: "cozy-road-test",
+        storageBucket: "cozy-road-test.appspot.com",
+        messagingSenderId: "306187772812",
+        clientId: "306187772812-rabplmrug8l7t4ldqalkq8880bc5folv.apps.googleusercontent.com"
+      };
+      firebase.initializeApp(config);
     </script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.css" />
+    <script type="text/javascript">
+  // FirebaseUI config.
+  var uiConfig = {
+    signInSuccessUrl: 'loggedIn.html',
+    signInOptions: [
+      // Leave the lines as is for the providers you want to offer your users.
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    ],
+    // tosUrl and privacyPolicyUrl accept either url string or a callback
+    // function.
+    // Terms of service url/callback.
+    tosUrl: '<your-tos-url>',
+    // Privacy policy url/callback.
+    privacyPolicyUrl: function() {
+      window.location.assign('<your-privacy-policy-url>');
+    }
+  };
+
+  // Initialize the FirebaseUI Widget using Firebase.
+  var ui = new firebaseui.auth.AuthUI(firebase.auth());
+  // The start method will wait until the DOM is loaded.
+  ui.start('#firebaseui-auth-container', uiConfig);
+</script>
+  </head>
+  <div></div>
+  <body>
+    <!-- <h1 align="center" style="color: black;">Demo</h1> -->
+
+    <div id="firebaseui-auth-container">
+    </div>
+
+    <script src="/__/firebase/5.5.0/firebase-app.js"></script>
+    <script src="/__/firebase/5.5.0/firebase-auth.js"></script>
+    <script src="/__/firebase/5.5.0/firebase-database.js"></script>
+    <script src="/__/firebase/5.5.0/firebase-storage.js"></script>
+    <script src="/__/firebase/5.5.0/firebase-messaging.js"></script>
+    <script src="/__/firebase/init.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
 </html>

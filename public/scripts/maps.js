@@ -68,6 +68,17 @@ function makeInfoBox(controlDiv, map) {
   controlUI.appendChild(controlText);
 }
 
+function makeControlMarkers(controlTrashMarkers, map) {
+  controlTrashMarkers.style.cursor = 'pointer';
+  controlTrashMarkers.style.backgroundImage = "url(./img/trash.png)";
+  controlTrashMarkers.style.backgroundSize = 'contain';
+  controlTrashMarkers.style.height = '50px';
+  controlTrashMarkers.style.width = '50px';
+  controlTrashMarkers.style.top = '11px';
+  controlTrashMarkers.style.left = '150px';
+  controlTrashMarkers.title = 'Click to remove my markers';
+}
+
 /**
 * Starting point for running the program. Authenticates the user.
 * @param {function()} onAuthSuccess - Called when authentication succeeds.
@@ -124,18 +135,29 @@ function initMap() {
 
   // Create the DIV to hold the control and call the makeInfoBox() constructor
   // passing in this DIV.
-  var infoBoxDiv = document.createElement('div');
+  /*var infoBoxDiv = document.createElement('div');
   makeInfoBox(infoBoxDiv, map);
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(infoBoxDiv);
-   // Listen for clicks and add the location of the click to firebase.
-   map.addListener('click', function(e) {
-       if(isUserSignedIn()) {
-         // alert("User is signed in")
-         data.lat = e.latLng.lat();
-         data.lng = e.latLng.lng();
-         addToFirebase(data);
-       }
-   });
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(infoBoxDiv);*/
+
+
+  // Create the removeMarkers control
+  var controlTrashMarkers = document.createElement('div');
+  makeControlMarkers(controlTrashMarkers, map);
+  map.controls[google.maps.ControlPosition.LEFT_CENTER].push(controlTrashMarkers);
+
+  controlTrashMarkers.addEventListener('click', function() {
+    removeMarkers();
+  });
+
+  // Listen for clicks and add the location of the click to firebase.
+  map.addListener('click', function(e) {
+     if(isUserSignedIn()) {
+       // alert("User is signed in")
+       data.lat = e.latLng.lat();
+       data.lng = e.latLng.lng();
+       addToFirebase(data);
+     }
+  });
 
  // Create a heatmap.
  var heatmap = new google.maps.visualization.HeatmapLayer({
@@ -156,12 +178,13 @@ function AutocompleteDirectionsHandler(map) {
   this.originPlaceId = null;
   this.destinationPlaceId = null;
   this.travelMode = 'WALKING';
+  this.safetyMode = 'SAFE';
   var originInput = document.getElementById('origin-input');
   var destinationInput = document.getElementById('destination-input');
   var modeSelector = document.getElementById('mode-selector');
+  var safetySelector = document.getElementById('safety-selector');
   this.directionsService = new google.maps.DirectionsService;
-  this.directionsDisplay = new google.maps.DirectionsRenderer;
-  this.directionsDisplay.setMap(map);
+  this.directionsDisplays = [];
 
   var originAutocomplete = new google.maps.places.Autocomplete(
       originInput, {placeIdOnly: true});
@@ -172,12 +195,16 @@ function AutocompleteDirectionsHandler(map) {
   this.setupClickListener('changemode-transit', 'TRANSIT');
   this.setupClickListener('changemode-driving', 'DRIVING');
 
+  this.setupSafeClickListener('changesafety-safe', 'SAFE');
+  this.setupSafeClickListener('changesafety-verysafe', 'VERY SAFE');
+
   this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
   this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
 
   this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
   this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
   this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
+  this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(safetySelector);
 }
 
 // Sets a listener on a radio button to change the filter type on Places
@@ -187,6 +214,15 @@ AutocompleteDirectionsHandler.prototype.setupClickListener = function(id, mode) 
   var me = this;
   radioButton.addEventListener('click', function() {
     me.travelMode = mode;
+    me.route();
+  });
+};
+
+AutocompleteDirectionsHandler.prototype.setupSafeClickListener = function(id, safety) {
+  var radioButton = document.getElementById(id);
+  var me = this;
+  radioButton.addEventListener('click', function() {
+    me.safetyMode = safety;
     me.route();
   });
 };
@@ -219,10 +255,52 @@ AutocompleteDirectionsHandler.prototype.route = function() {
   this.directionsService.route({
     origin: {'placeId': this.originPlaceId},
     destination: {'placeId': this.destinationPlaceId},
+    provideRouteAlternatives: true,
     travelMode: this.travelMode
   }, function(response, status) {
     if (status === 'OK') {
-      me.directionsDisplay.setDirections(response);
+      me.directionsDisplays.forEach(direction => {
+        direction.setMap(null);
+      });
+      me.directionsDisplays = [];
+      //me.directionsDisplay.setDirections(response);
+      //console.log(response.routes.length);
+      //show all alternative routes
+      var isLocationOnEdge = google.maps.geometry.poly.isLocationOnEdge;
+      //loop through all dangerous points
+      var ref = firebase.database().ref('clicks');
+
+       for (var i = 0, len = response.routes.length; i < len; ++i) {
+         var dangerous_path = false;
+         ref.once('value', function(snapshot) {
+           snapshot.forEach(function(childSnapshot) {
+             var childData = childSnapshot.val();
+             var point = new google.maps.LatLng(childData.lat, childData.lng);
+             //var path = response.routes[i].legs;
+             var path = response.routes[i].overview_path;
+             var polyline = new google.maps.Polyline({
+               path: path
+             })
+             if (me.safetyMode == "SAFE" && isLocationOnEdge(point,polyline,13e-5)) {
+               dangerous_path = true;
+             } else if (me.safetyMode == "VERY SAFE" && isLocationOnEdge(point,polyline,1e-3)) {
+               dangerous_path = true;
+             }
+           });
+         });
+         if (!dangerous_path) {
+           var newDirectionsRenderer = new google.maps.DirectionsRenderer({
+             map: me.map,
+             directions: response,
+             routeIndex: i
+           });
+           console.log("printed non-dangerous route");
+           me.directionsDisplays.push(newDirectionsRenderer);
+           //onsole.log("added new renderer to displays array");
+         } else {
+           console.log("dangerous route!");
+         }
+       }
     } else {
       window.alert('Directions request failed due to ' + status);
     }
