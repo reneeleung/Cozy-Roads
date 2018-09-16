@@ -1,3 +1,11 @@
 .DS_Store
 node_modules/
 firebase-debug.log
+database.rules.json
+firebase.json
+firestore.indexes.json
+firestore.rules
+functions/
+package-lock.json
+package.json
+storage.rules
