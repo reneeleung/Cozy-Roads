@@ -71,7 +71,7 @@
   </head>
   <body>
     <!-- <h1 align="center" style="color: white;">Demo</h1> -->
-    <nav class="navbar navbar-dark navbar-inverse bg-inverse bg-dark fixed-top">
+    <nav class="navbar navbar-dark navbar-inverse bg-inverse bg-primary fixed-top">
       <a class="navbar-brand" href="#">Cozy Road</a>
       <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ourMenu" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -79,7 +79,7 @@
       <!-- <div class="collapse navbar-collapse" id="ourMenu"> -->
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
           </li>
           <!-- <li class="nav-item">
             <a class="nav-link" href="#">Link</a>
@@ -122,25 +122,26 @@
         </div>
 
         <div id="sidebar-container" class="col-md-3">
-          <div class="container-fluid">
-
-            <div id="sidebar">
-              <!-- <div type="button" class="btn" id="hide-sidebar"> Hide side bar </div> -->
-              <div class="no-login">
-                <div id="firebaseui-auth-container">
+          <div class="container">
+            <div class="text-center">
+              <div id="sidebar">
+                <!-- <div type="button" class="btn" id="hide-sidebar"> Hide side bar </div> -->
+                <div class="no-login">
+                  <div id="firebaseui-auth-container">
+                  </div>
                 </div>
-              </div>
 
-              <div class="logged-in hidden">
-                <!-- I think if you added/removed the 'hidden' class, you can dynamically hide/unhide elements? -->
-                <div id="statistics">
-                  <!-- SHOW USER STATISTICS HERE?? -->
+                <div class="logged-in hidden">
+                  <!-- I think if you added/removed the 'hidden' class, you can dynamically hide/unhide elements? -->
+                  <div id="statistics">
+                    <!-- SHOW USER STATISTICS HERE?? -->
+                  </div>
+                  <br>
+                  <div type="button" class="btn btn-info" id="logout" onclick="signOut()"> Log out </div>
                 </div>
-                <div type="button" class="btn" id="logout" onclick="signOut()"> Log out </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
 

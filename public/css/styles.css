@@ -72,7 +72,14 @@ body {
     margin-left: 12px;
     padding: 5px 11px 0px 11px;
 }
-
+h2 {
+  padding: 20px;
+  margin: 20px;
+}
+h3 {
+  padding: 15px;
+  margin: 15px;
+}
 #mode-selector label {
     font-family: Roboto;
     font-size: 13px;
