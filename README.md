@@ -8,8 +8,8 @@ This is a crowd-source application using Google Map API and Firebase. People wit
 Everyone using this application can find the safest route from point A to point B based on the dangerous events recorded.
 
 ### To develop the application offline:
-* (Install node/npm)[https://nodejs.org/en/download/]
-* (Install Firebase)[https://firebase.google.com/docs/auth/web/start]
+* [Install node/npm](https://nodejs.org/en/download/)
+* [Install Firebase](https://firebase.google.com/docs/auth/web/start)
 
 ```sh
 firebase init
