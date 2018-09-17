@@ -46,6 +46,8 @@ var data = {
   lng: null
 };
 
+var myuid;
+
 function makeInfoBox(controlDiv, map) {
   // Set CSS for the control border.
   var controlUI = document.createElement('div');
